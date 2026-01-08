@@ -28,11 +28,8 @@ public class CheckoutController {
             @RequestParam String sellerAccountId,
             @RequestBody List<Map<String, Object>> lineItem
     ) throws StripeException {
-        Session session = this.checkoutService.createCheckoutSession(customerId, sellerAccountId, lineItem);
-        return ResponseEntity.ok(Map.of(
-                "url", session.getUrl()
-        ));
+        Map<String, String> result = this.checkoutService.createCheckoutSession(customerId, sellerAccountId, lineItem);
+        return ResponseEntity.ok(result);
     }
-
 
 }

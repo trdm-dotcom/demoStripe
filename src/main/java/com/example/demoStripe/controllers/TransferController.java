@@ -1,5 +1,6 @@
 package com.example.demoStripe.controllers;
 
+import com.example.demoStripe.services.ITransferService;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Transfer;
 import com.stripe.param.TransferCreateParams;
@@ -16,20 +17,15 @@ import java.util.Map;
 @RequestMapping("/transfer")
 @Slf4j
 public class TransferController {
+    private final ITransferService transferService;
+
+    public TransferController(ITransferService transferService) {
+        this.transferService = transferService;
+    }
 
     @PostMapping()
-    public ResponseEntity<?> bonus(@RequestParam String sellerAccountId, @RequestParam Long amount, @RequestParam String currency) throws StripeException {
-        TransferCreateParams params =
-                TransferCreateParams.builder()
-                        .setAmount(amount)
-                        .setCurrency(currency)
-                        .setDestination(sellerAccountId)
-                        .setDescription("Platform bonus")
-                        .build();
-
-        Transfer transfer = Transfer.create(params);
-        return ResponseEntity.ok(
-                Map.of("transferId", transfer.getId())
-        );
+    public ResponseEntity<?> createTransfer(@RequestParam String sellerAccountId, @RequestParam Long amount, @RequestParam String currency) {
+        Map<String, String> result = this.transferService.createTransfer(sellerAccountId, amount, currency);
+        return ResponseEntity.ok(result);
     }
 }

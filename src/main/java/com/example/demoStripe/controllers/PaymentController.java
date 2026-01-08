@@ -34,8 +34,8 @@ public class PaymentController {
             @RequestParam(required = false) String customerId,
             @RequestParam List<String> paymentMethod
     ) throws StripeException {
-        PaymentIntent intent = this.paymentService.createPayment(amount, currency, sellerAccountId, customerId, paymentMethod);
-        return ResponseEntity.ok((Map.of("paymentIntentId", intent.getId(), "clientSecret", intent.getClientSecret())));
+        Map<String, String> result = this.paymentService.createPayment(amount, currency, sellerAccountId, customerId, paymentMethod);
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("payout")
@@ -44,8 +44,8 @@ public class PaymentController {
             @RequestParam Long amount,
             @RequestParam String currency
     ) throws StripeException {
-        Payout payout = this.paymentService.payout(sellerAccountId, amount, currency);
-        return ResponseEntity.ok(Map.of("payoutId", payout.getId()));
+        Map<String, String> result = this.paymentService.payout(sellerAccountId, amount, currency);
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("refund")
@@ -55,7 +55,7 @@ public class PaymentController {
             @RequestParam String currency,
             @RequestParam(required = false) String customerId
     ) throws StripeException {
-        Refund refund = this.paymentService.refund(paymentIntentId, amount, currency, customerId);
-        return ResponseEntity.ok(Map.of("refundId", refund.getId()));
+        Map<String, String> result = this.paymentService.refund(paymentIntentId, amount, currency, customerId);
+        return ResponseEntity.ok(result);
     }
 }

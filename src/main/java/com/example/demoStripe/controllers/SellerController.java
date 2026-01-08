@@ -25,18 +25,14 @@ public class SellerController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> createAccount(@RequestParam String email, @RequestParam String country) throws StripeException {
-        Pair<Account, AccountLink> pair = this.sellerService.createAccount(email, country);
-        return ResponseEntity.ok(Map.of(
-                "stripeAccountId", pair.getFirst().getId(),
-                "onboardingUrl", pair.getSecond().getUrl()
-            )
-        );
+    public ResponseEntity<?> createAccount(@RequestParam String email, @RequestParam String country){
+        Map<String, String> result = this.sellerService.createAccount(email, country);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/account-status/{sellerAccountId}")
-    public ResponseEntity<?> accountStatus(@PathParam("sellerAccountId") String sellerAccountId) throws StripeException {
-        Map<String, Object> body = this.sellerService.accountStatus(sellerAccountId);
-        return ResponseEntity.ok(body);
+    public ResponseEntity<?> accountStatus(@PathParam("sellerAccountId") String sellerAccountId){
+        Map<String, Object> result = this.sellerService.accountStatus(sellerAccountId);
+        return ResponseEntity.ok(result);
     }
 }
